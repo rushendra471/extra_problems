@@ -1,47 +1,24 @@
 /* Structure is same as previous sructure */
-
-void recursiveReverse(struct node** head)
-{
-    struct node* start;
-    struct node* temp;
-      
-    if (*head == NULL)
-       return;   
- 
-    start = *head;  
-    temp  = start->nxt;
- 
-    if (temp == NULL)
-       return;   
- 
-    recursiveReverse(&temp);
-    start->nxt->nxt  = start;  
-     
-    start->nxt  = NULL;           
-    *head = temp;              
+struct node * reverse(NODE *first){
+	struct node *p = first,*q = NULL,*r,*s=first;
+	while (p != NULL){
+		r = q;
+		q = p;
+		p = p->nxt;
+		q->nxt = r;
+	}
+	first->nxt = NULL;
+	return q;
 }
-
 // 2nd method
 
-void reverse(node **head)
-{
-    if (!head)
-        return;
-    rev(*head, NULL, head);
+struct node * reverse(struct node * start) {
+	struct node * r = NULL;
+	while (start) {
+		NODE* cur = start->nxt;
+		start->nxt = r;
+		r = start;
+		start = cur;
+	}
+	return r;
 }
- 
-void rev(node *curr, node *prev, node **head)
-{
-    if (!curr->nxt){
-        *head = curr;
-        curr->nxt = prev;
-        return;
-    }
- 
-    node *nxt = curr->nxt;
- 
-    curr->nxt = prev;
- 
-    rev(nxt, curr, head);
-}
-
