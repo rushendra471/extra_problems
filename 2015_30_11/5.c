@@ -1,41 +1,58 @@
-int find(struct node * list, int r){
-	int i = 0;
-	struct node * t = list;
-	while (i < r){
-		t = t->nxt;
+// structure is same as previous one. create and display functions are also same as in 1st programme
+
+int getElement(int n1, int n2, int r) {
+
+	struct node * list1 = NULL, *list2 = NULL, *cur = NULL, *start = NULL, *t = NULL;
+	int i;
+
+	for (i = 1; i <= r; i++){
+		list1 = create(list1, (n1 * i));
+		list2 = create(list2, (n2 * i));
+	}
+
+	printf("\nlist1:-");
+	display(list1);
+
+	printf("\nlist2:-");
+	display(list2);
+
+	while (list1 != NULL && list2 != NULL) {
+		if (list1->val < list2->val) {
+			t = list1;
+			list1 = list1->nxt;
+		}
+		else if (list1->val > list2->val) {
+			t = list2;
+			list2 = list2->nxt;
+		}
+		else {
+			t = list1;
+			list1 = list1->nxt;
+			list2 = list2->nxt;
+		}
+		
+		if (start == NULL)
+			start = cur = t ;
+		else{
+			cur->nxt = t;
+			cur = cur->nxt;
+		}
+	}
+
+	if (list1 != NULL)
+		cur->nxt = list1;
+	else
+		cur->nxt = list2;
+
+	printf("\nMerged list:-");
+	display(start);
+
+	i = 1;
+	cur = start;
+	while (i != r) {
+		cur = cur->nxt;
 		i++;
 	}
-	return t->val;
-}
 
-struct node * mergelist(struct node * first, struct node * second){
-	struct node * third = NULL;
-	if (first == NULL)
-		return second;
-	if (second == NULL)
-		return first;
-	while (first->nxt!= NULL && second->nxt!= NULL){
-		if (first->val < second->val){
-			third = insert(third, first->val);
-			first = first->nxt;
-		}
-		else if (second->val < first->val){
-			third = insert(third, second->val);
-			second = second->nxt;
-		}
-		else{
-			third = insert(third, first->val);
-			first = first->nxt;
-			second = second->nxt;
-		}
-	}
-	while (first != NULL){
-		third = insert(third, first->val);
-		first = first->nxt;
-	}
-	while (second != NULL)	{
-		third = insert(third, second->val);
-		second = second->nxt;
-	}
-	return third;
+	return cur->val;
 }
