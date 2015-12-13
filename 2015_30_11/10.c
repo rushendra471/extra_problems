@@ -1,20 +1,30 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
-
-int main(){
-	int count = 0;
-	char * fileName = "sam.txt";
-	FILE * fpIn;
-	if ((fpIn = fopen(fileName, "r")) == NULL)
-		printf(" file %s open error\n", fileName);
-	fseek(fpIn, 0, SEEK_END);
-	while (count < 10){
-		fseek(fpIn, -2, SEEK_CUR);
-		if (ftell(fpIn)<0L)
-			break;
-		char now = fgetc(fpIn);
-		printf("%c", now);
-		if (now == '\n')
-			++count;
+#define L 256
+main(){
+	FILE *fp1 = fopen("sam.txt", "r");
+	FILE *fp2 = fopen("sam.txt", "r");
+	char line[L];
+	int cnt = 0,k;
+	printf("Enter no.of lines to read from last:-");
+	scanf("%d", &k);
+	while (fgets(line, L, fp1) != NULL){
+		if (cnt < k)
+			cnt++;
+		else
+			fgets(line, L, fp2);
 	}
-	fclose(fpIn);
+
+	if (cnt < k) {
+		printf("less than 10 lines in the file\n");
+		return 1;
+	}
+
+	while (fgets(line, L, fp2) != NULL)
+		printf("%s", line);
+	
+	fclose(fp1);
+	fclose(fp2);
+	fflush(stdin);
+	getchar();
 }

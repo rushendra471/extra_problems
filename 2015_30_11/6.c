@@ -1,49 +1,53 @@
-struct node * add(struct node * first, struct node * second)
-{
-	struct node * list=NULL;
-	int s = 0,flag=0,tmp=0;
-	if (first == NULL)
-		return second;
-	if (second == NULL)
-		return first;
-	while (first != NULL && second != NULL){
-		if (first->val + second->val > 9){
-			tmp = (first->val + second->val) % 10;
-			list = insert(list, tmp + flag);
-			flag = (first->val + second->val) / 10;
+typedef struct node{
+	int val;
+	struct node *nxt,*prv; // Doubly linked list
+}NODE;
+
+
+struct node * add(struct node * list1, struct node * list2){
+	if(list1==NULL)
+		return list2;
+	else if(list2==NULL)
+		return list1;
+	while(list1->nxt!=NULL)
+		list1=list1->nxt;
+	while(list2->nxt!=NULL)
+		list2=list2->nxt;
+	int r=0,c=0;
+	struct node *res=NULL;
+	while(list1!=NULL&&list2!=NULL){
+		r=list1->val+list2->val+c;
+		if(r>9){
+			r=r%10;
+			c=1;
 		}
-		else{
-			list = insert(list, first->val + second->val + flag);
-			flag = 0;
-		}
-		first = first->nxt;
-		second = second->nxt;
+		else
+			c=0;
+		res=create(res,r);
+		list1=list1->prv;
+		list2=list2->prv;
 	}
-	if (first == NULL && second == NULL && flag != 0)
-		list = insert(list, flag);
-	while (first != NULL){
-		tmp = first->val + flag;
-		if (tmp > 9){
-			flag = tmp % 10;
-			list = insert(list, tmp + flag);
+	while(list1!=NULL){
+		r=list1->val+c;
+		if(r>9){
+			r=r%10;
+			c=1;
 		}
-		else{
-			list = insert(list, tmp + flag);
-			flag = 0;
-		}
-		first = first->nxt;
+		else
+			c=0;
+		res=create(res,r);
+		list1=list1->prv;
 	}
-	while (second != NULL){
-		tmp = second->val + flag;
-		if (tmp > 9){
-			flag = tmp % 10;
-			list = insert(list, tmp + flag);
+	while(list2!=NULL){
+		r=list2->val+c;
+		if(r>9){
+			r=r%10;
+			c=1;
 		}
-		else{
-			list = insert(list, tmp + flag);
-			flag = 0;
-		}
-		second = second->nxt;
+		else
+			c=0;
+		res=create(res,r);
+		list2=list2->prv;
 	}
-	return reverse(list); // to reverse the linked list.
+	res=reverse(res); //reversing a doubly linked list
 }
